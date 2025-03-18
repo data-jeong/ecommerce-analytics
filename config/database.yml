@@ -1,0 +1,179 @@
+development:
+  oltp:
+    host: localhost
+    port: 5432
+    database: ecommerce_oltp
+    username: ${OLTP_DB_USER}
+    password: ${OLTP_DB_PASSWORD}
+    pool_size: 10
+    max_overflow: 20
+    pool_timeout: 30
+    pool_recycle: 1800
+
+  olap:
+    host: localhost
+    port: 5432
+    database: ecommerce_olap
+    username: ${OLAP_DB_USER}
+    password: ${OLAP_DB_PASSWORD}
+    pool_size: 20
+    max_overflow: 40
+    pool_timeout: 60
+    pool_recycle: 3600
+
+  mongodb:
+    host: localhost
+    port: 27017
+    database: ecommerce_logs
+    username: ${MONGO_USER}
+    password: ${MONGO_PASSWORD}
+    auth_source: admin
+    max_pool_size: 100
+    min_pool_size: 10
+    max_idle_time_ms: 10000
+
+  redis:
+    host: localhost
+    port: 6379
+    db: 0
+    password: ${REDIS_PASSWORD}
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    retry_on_timeout: true
+    max_connections: 100
+    encoding: utf-8
+
+  elasticsearch:
+    hosts:
+      - http://localhost:9200
+    username: ${ES_USER}
+    password: ${ES_PASSWORD}
+    verify_certs: false
+    timeout: 30
+    max_retries: 3
+    retry_on_timeout: true
+    sniff_on_start: true
+    sniff_on_connection_fail: true
+
+production:
+  oltp:
+    host: ${OLTP_DB_HOST}
+    port: ${OLTP_DB_PORT}
+    database: ecommerce_oltp
+    username: ${OLTP_DB_USER}
+    password: ${OLTP_DB_PASSWORD}
+    pool_size: 50
+    max_overflow: 100
+    pool_timeout: 30
+    pool_recycle: 1800
+
+  olap:
+    host: ${OLAP_DB_HOST}
+    port: ${OLAP_DB_PORT}
+    database: ecommerce_olap
+    username: ${OLAP_DB_USER}
+    password: ${OLAP_DB_PASSWORD}
+    pool_size: 100
+    max_overflow: 200
+    pool_timeout: 60
+    pool_recycle: 3600
+
+  mongodb:
+    host: ${MONGO_HOST}
+    port: ${MONGO_PORT}
+    database: ecommerce_logs
+    username: ${MONGO_USER}
+    password: ${MONGO_PASSWORD}
+    auth_source: admin
+    max_pool_size: 200
+    min_pool_size: 20
+    max_idle_time_ms: 10000
+    replica_set: ${MONGO_REPLICA_SET}
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    db: 0
+    password: ${REDIS_PASSWORD}
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    retry_on_timeout: true
+    max_connections: 200
+    encoding: utf-8
+    cluster_mode: true
+    cluster_nodes:
+      - ${REDIS_NODE_1}
+      - ${REDIS_NODE_2}
+      - ${REDIS_NODE_3}
+
+  elasticsearch:
+    hosts:
+      - ${ES_NODE_1}
+      - ${ES_NODE_2}
+      - ${ES_NODE_3}
+    username: ${ES_USER}
+    password: ${ES_PASSWORD}
+    verify_certs: true
+    ca_certs: ${ES_CA_CERTS}
+    timeout: 30
+    max_retries: 3
+    retry_on_timeout: true
+    sniff_on_start: true
+    sniff_on_connection_fail: true
+
+test:
+  oltp:
+    host: localhost
+    port: 5432
+    database: ecommerce_oltp_test
+    username: test_user
+    password: test_password
+    pool_size: 5
+    max_overflow: 10
+    pool_timeout: 30
+    pool_recycle: 1800
+
+  olap:
+    host: localhost
+    port: 5432
+    database: ecommerce_olap_test
+    username: test_user
+    password: test_password
+    pool_size: 5
+    max_overflow: 10
+    pool_timeout: 30
+    pool_recycle: 1800
+
+  mongodb:
+    host: localhost
+    port: 27017
+    database: ecommerce_logs_test
+    username: test_user
+    password: test_password
+    auth_source: admin
+    max_pool_size: 10
+    min_pool_size: 5
+    max_idle_time_ms: 10000
+
+  redis:
+    host: localhost
+    port: 6379
+    db: 1
+    password: test_password
+    socket_timeout: 5
+    socket_connect_timeout: 5
+    retry_on_timeout: true
+    max_connections: 10
+    encoding: utf-8
+
+  elasticsearch:
+    hosts:
+      - http://localhost:9200
+    username: test_user
+    password: test_password
+    verify_certs: false
+    timeout: 30
+    max_retries: 3
+    retry_on_timeout: true
+    sniff_on_start: true
+    sniff_on_connection_fail: true

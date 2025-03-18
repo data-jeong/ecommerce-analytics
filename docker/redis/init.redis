@@ -1,0 +1,66 @@
+# Configure Redis for production use
+requirepass ${REDIS_PASSWORD}
+
+# Basic Redis configuration
+maxmemory 2gb
+maxmemory-policy allkeys-lru
+appendonly yes
+appendfsync everysec
+
+# Connection settings
+timeout 300
+tcp-keepalive 60
+
+# Snapshotting
+save 900 1
+save 300 10
+save 60 10000
+
+# Replication
+replica-read-only yes
+repl-diskless-sync yes
+repl-diskless-sync-delay 5
+
+# Security features
+rename-command FLUSHALL ""
+rename-command FLUSHDB ""
+rename-command DEBUG ""
+
+# Slow log configuration
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+
+# Keyspace notifications
+notify-keyspace-events "Ex"
+
+# Create default key prefixes and set their TTL
+*KEYS
+SET cache:daily_stats:ttl 86400
+SET cache:hourly_stats:ttl 3600
+SET cache:user_session:ttl 1800
+SET cache:product_details:ttl 3600
+SET cache:category_tree:ttl 86400
+SET cache:search_results:ttl 300
+SET cache:user_cart:ttl 604800
+SET cache:rate_limits:ttl 60
+
+# Configure key namespaces
+SELECT 0  # Default database for general caching
+SELECT 1  # Session management
+SELECT 2  # Rate limiting
+SELECT 3  # Real-time analytics
+SELECT 4  # Job queues
+SELECT 5  # Pub/Sub channels
+
+# Set up some common rate limit keys
+SET rate_limit:api:default 1000
+SET rate_limit:api:auth 100
+SET rate_limit:api:search 500
+
+# Configure pub/sub channels
+SUBSCRIBE analytics_events
+SUBSCRIBE user_events
+SUBSCRIBE system_events
+
+# Return to default database
+SELECT 0 

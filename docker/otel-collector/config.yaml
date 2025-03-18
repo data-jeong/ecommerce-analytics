@@ -1,0 +1,73 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 1024
+  resourcedetection:
+    detectors: [env, system]
+    timeout: 2s
+  attributes:
+    actions:
+      - key: environment
+        value: ${ENV}
+        action: insert
+  filter:
+    metrics:
+      include:
+        match_type: regexp
+        metric_names:
+          - .*duration.*
+          - .*request.*
+          - .*error.*
+          - .*active.*
+    logs:
+      include:
+        match_type: regexp
+        severity_texts: ["ERROR", "WARN", "INFO"]
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:8889
+  elasticsearch:
+    endpoints: ["http://elasticsearch:9200"]
+    index: logs-%{YYYY.MM.DD}
+  logging:
+    loglevel: debug
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, resourcedetection, attributes]
+      exporters: [otlp, logging]
+    metrics:
+      receivers: [otlp]
+      processors:
+        [memory_limiter, batch, resourcedetection, attributes, filter/metrics]
+      exporters: [prometheus, logging]
+    logs:
+      receivers: [otlp]
+      processors:
+        [memory_limiter, batch, resourcedetection, attributes, filter/logs]
+      exporters: [elasticsearch, logging]
+
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      level: detailed
+      address: 0.0.0.0:8888
