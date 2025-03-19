@@ -156,3 +156,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Olist](https://olist.com/) for providing the dataset
 - [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/olistbr/brazilian-ecommerce)
+
+## ToDO 
+- [ ] K8s
