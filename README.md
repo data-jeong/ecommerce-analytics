@@ -41,7 +41,7 @@ A comprehensive analytics platform for e-commerce data using the Olist dataset. 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/ecommerce-analytics.git
+https://github.com/data-jeong/ecommerce-analytics.git
 cd ecommerce-analytics
 ```
 
